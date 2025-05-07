@@ -3,7 +3,6 @@ import { simpleCalculator, Action } from './index';
 
 describe('simpleCalculator tests', () => {
   test('should add two numbers', () => {
-    
     const result = simpleCalculator({
       a: 2,
       b: 3,
@@ -16,11 +15,11 @@ describe('simpleCalculator tests', () => {
     const result = simpleCalculator({
       a: 5,
       b: 3,
-      
+
       action: Action.Subtract,
+    });
+    expect(result).toBe(2);
   });
-  expect(result).toBe(2);
-});
 
   test('should multiply two numbers', () => {
     const result = simpleCalculator({
@@ -37,7 +36,7 @@ describe('simpleCalculator tests', () => {
       b: 3,
       action: Action.Divide,
     });
-    expect(result).toBe(2); 
+    expect(result).toBe(2);
   });
 
   test('should exponentiate two numbers', () => {
@@ -46,7 +45,7 @@ describe('simpleCalculator tests', () => {
       b: 3,
       action: Action.Exponentiate,
     });
-    expect(result).toBe(8); 
+    expect(result).toBe(8);
   });
 
   test('should return null for invalid action', () => {
@@ -55,10 +54,15 @@ describe('simpleCalculator tests', () => {
       b: 3,
       action: 'InvalidAction' as Action,
     });
-    expect(result).toBeNull(); 
+    expect(result).toBeNull();
   });
 
   test('should return null for invalid arguments', () => {
-    // Write your test here
+    const result = simpleCalculator({
+      a: 'invalid',
+      b: 'invalid',
+      action: Action.Add,
+    });
+    expect(result).toBeNull();
   });
 });
