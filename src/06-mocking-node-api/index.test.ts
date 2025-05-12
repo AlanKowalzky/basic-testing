@@ -35,8 +35,11 @@ describe('doStuffByTimeout', () => {
     
     doStuffByTimeout(mockCallback, timeout);
     
-    expect(setTimeout).toHaveBeenCalledTimes(1);
-    expect(setTimeout).toHaveBeenLastCalledWith(mockCallback, timeout);
+    expect(jest.getTimerCount()).toBe(1);
+    expect(mockCallback).not.toHaveBeenCalled();
+    
+    jest.advanceTimersByTime(timeout);
+    expect(mockCallback).toHaveBeenCalledTimes(1);
   });
 
   test('should call callback only after timeout', () => {
@@ -70,8 +73,11 @@ describe('doStuffByInterval', () => {
     
     doStuffByInterval(mockCallback, interval);
     
-    expect(setInterval).toHaveBeenCalledTimes(1);
-    expect(setInterval).toHaveBeenLastCalledWith(mockCallback, interval);
+    expect(jest.getTimerCount()).toBe(1);
+    expect(mockCallback).not.toHaveBeenCalled();
+    
+    jest.advanceTimersByTime(interval);
+    expect(mockCallback).toHaveBeenCalledTimes(1);
   });
 
   test('should call callback multiple times after multiple intervals', () => {
