@@ -1,5 +1,11 @@
 // Uncomment the code below and write your tests
-import { BankAccount, getBankAccount, InsufficientFundsError, TransferFailedError, SynchronizationFailedError } from './index';
+import {
+  BankAccount,
+  getBankAccount,
+  InsufficientFundsError,
+  TransferFailedError,
+  SynchronizationFailedError,
+} from './index';
 import { random } from 'lodash';
 
 // Mockujemy moduł lodash, aby kontrolować zachowanie funkcji random
@@ -57,8 +63,12 @@ describe('BankAccount', () => {
 
     test('should throw InsufficientFundsError when withdrawing more than balance', () => {
       const withdrawAmount = initialBalance + 10;
-      expect(() => account.withdraw(withdrawAmount)).toThrow(InsufficientFundsError);
-      expect(() => account.withdraw(withdrawAmount)).toThrow(`Insufficient funds: cannot withdraw more than ${initialBalance}`);
+      expect(() => account.withdraw(withdrawAmount)).toThrow(
+        InsufficientFundsError,
+      );
+      expect(() => account.withdraw(withdrawAmount)).toThrow(
+        `Insufficient funds: cannot withdraw more than ${initialBalance}`,
+      );
     });
 
     test('should return the account instance for method chaining after withdraw', () => {
@@ -82,19 +92,25 @@ describe('BankAccount', () => {
 
     test('should throw InsufficientFundsError when transferring more than balance from source account', () => {
       const transferAmount = initialBalance + 10;
-      expect(() => account.transfer(transferAmount, recipientAccount)).toThrow(InsufficientFundsError);
+      expect(() => account.transfer(transferAmount, recipientAccount)).toThrow(
+        InsufficientFundsError,
+      );
       expect(account.getBalance()).toBe(initialBalance); // Saldo źródłowe nie powinno się zmienić
       expect(recipientAccount.getBalance()).toBe(50); // Saldo docelowe nie powinno się zmienić
     });
 
     test('should throw TransferFailedError when transferring to the same account', () => {
       const transferAmount = 10;
-      expect(() => account.transfer(transferAmount, account)).toThrow(TransferFailedError);
+      expect(() => account.transfer(transferAmount, account)).toThrow(
+        TransferFailedError,
+      );
       expect(account.getBalance()).toBe(initialBalance); // Saldo nie powinno się zmienić
     });
 
     test('should return the source account instance for method chaining after transfer', () => {
-      expect(account.transfer(30, recipientAccount)).toBeInstanceOf(BankAccount);
+      expect(account.transfer(30, recipientAccount)).toBeInstanceOf(
+        BankAccount,
+      );
     });
   });
 
@@ -103,7 +119,9 @@ describe('BankAccount', () => {
       test('fetchBalance should return a number if request did not fail (simulated)', async () => {
         const mockedFetchedBalance = 77;
         // Symulujemy, że random() dla salda zwróci 77, a dla requestFailed zwróci 1 (czyli nie failed)
-        (random as jest.Mock).mockReturnValueOnce(mockedFetchedBalance).mockReturnValueOnce(1);
+        (random as jest.Mock)
+          .mockReturnValueOnce(mockedFetchedBalance)
+          .mockReturnValueOnce(1);
 
         const fetchedBalance = await account.fetchBalance();
         expect(fetchedBalance).toBe(mockedFetchedBalance);
@@ -125,7 +143,9 @@ describe('BankAccount', () => {
         const mockedFetchedBalance = 88;
         // Symulujemy, że random() dla salda zwróci 88, a dla requestFailed zwróci 1 (nie failed)
         // To wpłynie na wewnętrzne wywołanie fetchBalance w synchronizeBalance
-        (random as jest.Mock).mockReturnValueOnce(mockedFetchedBalance).mockReturnValueOnce(1);
+        (random as jest.Mock)
+          .mockReturnValueOnce(mockedFetchedBalance)
+          .mockReturnValueOnce(1);
 
         await account.synchronizeBalance();
         expect(account.getBalance()).toBe(mockedFetchedBalance);
@@ -136,16 +156,22 @@ describe('BankAccount', () => {
         // Symulujemy, że random() dla salda zwróci cokolwiek, a dla requestFailed zwróci 0 (failed)
         (random as jest.Mock).mockReturnValueOnce(50).mockReturnValueOnce(0);
 
-        await expect(account.synchronizeBalance()).rejects.toThrow(SynchronizationFailedError);
+        await expect(account.synchronizeBalance()).rejects.toThrow(
+          SynchronizationFailedError,
+        );
         expect(account.getBalance()).toBe(initialBalance); // Saldo nie powinno się zmienić
         expect(random).toHaveBeenCalledTimes(2);
       });
 
       test('should throw SynchronizationFailedError if fetchBalance (mocked directly) returned null', async () => {
         // Alternatywny sposób mockowania, bezpośrednio na metodzie fetchBalance
-        const fetchBalanceSpy = jest.spyOn(account, 'fetchBalance').mockResolvedValue(null);
+        const fetchBalanceSpy = jest
+          .spyOn(account, 'fetchBalance')
+          .mockResolvedValue(null);
 
-        await expect(account.synchronizeBalance()).rejects.toThrow(SynchronizationFailedError);
+        await expect(account.synchronizeBalance()).rejects.toThrow(
+          SynchronizationFailedError,
+        );
         expect(account.getBalance()).toBe(initialBalance);
 
         fetchBalanceSpy.mockRestore(); // Przywracamy oryginalną implementację

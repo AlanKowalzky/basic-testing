@@ -5,14 +5,15 @@ import { mockOne, mockTwo, mockThree, unmockedFunction } from './index';
 
 jest.mock('./index', () => {
   // Pobieramy oryginalny moduł
-  const originalModule = jest.requireActual<typeof import('./index')>('./index');
+  const originalModule =
+    jest.requireActual<typeof import('./index')>('./index');
 
   // Zwracamy obiekt, który będzie nową wersją modułu
   return {
     __esModule: true, // Ważne dla modułów ES6
     ...originalModule, // Zachowujemy wszystkie oryginalne eksporty (w tym unmockedFunction)
-    mockOne: jest.fn(),   // Nadpisujemy mockOne pustą funkcją mockującą
-    mockTwo: jest.fn(),   // Nadpisujemy mockTwo
+    mockOne: jest.fn(), // Nadpisujemy mockOne pustą funkcją mockującą
+    mockTwo: jest.fn(), // Nadpisujemy mockTwo
     mockThree: jest.fn(), // Nadpisujemy mockThree
   };
 });
