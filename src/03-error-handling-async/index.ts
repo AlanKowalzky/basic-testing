@@ -19,3 +19,9 @@ export class MyAwesomeError extends Error {
     super('This is my awesome custom error!');
   }
 }
+
+// Wywołanie z CLI
+if (require.main === module) {
+  const value = process.argv[2]; // wartość z terminala
+  resolveValue(value).then(console.log).catch(console.error);
+}
